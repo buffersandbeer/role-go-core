@@ -1,0 +1,26 @@
+---
+- name: Check for go
+  command: which go
+  register: go_path
+  failed_when: go_path.rc >= 2
+
+- name: get go package
+  become: true
+  get_url:
+      url: "{{ go_location }}"
+      dest: /tmp/go.tar.gz
+      checksum: "sha256:{{ go_sha256 }}"
+  when: go_path.rc == 1
+
+- name: create go directory
+  become: true
+  file:
+      path: "{{ go_install_dir }}"
+      state: directory
+      mode: 0755
+  when: go_path.rc == 1
+
+- name: install go
+  become: true
+  command: "tar -C {{ go_install_dir }} -xzf /tmp/go.tar.gz"
+  when: go_path.rc == 1

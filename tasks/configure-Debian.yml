@@ -1,0 +1,27 @@
+---
+- name: add GO to system-wide path
+  become: true
+  lineinfile:
+      path: /etc/profile
+      state: present
+      line: "export PATH=$PATH:{{ go_install_dir }}/go/bin"
+
+- name: add GO directory to skel
+  become: true
+  file:
+      path: /etc/skel/go
+      state: directory
+
+- name: add GO path to default bashrc
+  become: true
+  lineinfile:
+      path: /etc/skel/.bashrc
+      state: present
+      line: "export PATH=$PATH:{{ go_install_dir }}/go/bin"
+
+- name: add GO path to default zshrc
+  become: true
+  lineinfile:
+      path: /etc/skel/.zshrc
+      state: present
+      line: "export PATH=$PATH:{{ go_install_dir }}/go/bin"

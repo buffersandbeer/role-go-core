@@ -1,0 +1,6 @@
+---
+- name: include os-specific setup
+  include_tasks: "setup-{{ ansible_os_family }}.yml"
+
+- name: include os-specific config
+  include_tasks: "configure-{{ ansible_os_family }}.yml"
